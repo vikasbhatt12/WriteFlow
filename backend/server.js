@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const postRoutes = require('./routes/postRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 5001;
 app.use(cors()); 
 app.use(express.json()); 
 app.use('/api/posts', postRoutes);
+app.use('/api/users', userRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI, {
