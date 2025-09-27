@@ -1,7 +1,9 @@
-// client/src/pages/EditPost.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { marked } from 'marked';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+// import { marked } from 'marked';
 import toast from 'react-hot-toast';
 import { getPostById, updatePost } from '../api';
 
@@ -33,7 +35,7 @@ const EditPost = () => {
     try {
       await updatePost(id, { title, content: markdown });
       toast.success('Post updated successfully!');
-      navigate(`/post/${id}`); // Navigate to the updated post view
+      navigate(`/post/${id}`); 
     } catch (error) {
       toast.error('Failed to update post.');
     }
@@ -72,9 +74,12 @@ const EditPost = () => {
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h2 className="text-lg font-semibold mb-4">Preview</h2>
             <div
-              className="prose max-w-none h-[calc(100vh-350px)] overflow-auto"
-              dangerouslySetInnerHTML={{ __html: marked(markdown) }}
-            />
+              className="prose max-w-none h-[calc(100vh-350px)] overflow-auto"/>
+            {/* //   dangerouslySetInnerHTML={{ __html: marked(markdown) }} */}
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+                {markdown}
+              </ReactMarkdown>
+            
           </div>
         </div>
       </div>

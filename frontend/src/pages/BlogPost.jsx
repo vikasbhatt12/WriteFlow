@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { marked } from 'marked';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+// import { marked } from 'marked';
 import { getPostById } from '../api'; 
 
 const BlogPost = () => {
@@ -42,7 +44,10 @@ const BlogPost = () => {
           <p className="text-base text-gray-500">
             Published on {new Date(post.createdAt).toLocaleDateString()}
           </p>
-          <div dangerouslySetInnerHTML={{ __html: marked(post.content) }} />
+          {/* <div dangerouslySetInnerHTML={{ __html: marked(post.content) }} /> */}
+          <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+            {post.content}
+          </ReactMarkdown>
         </article>
         <div className="mt-10">
           <Link to="/my-blogs" className="text-blue-500 hover:text-blue-700">

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { marked } from 'marked';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+// import { marked } from 'marked';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom'; 
 import { createPost } from '../api'; 
@@ -77,9 +79,10 @@ const Editor = () => {
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h2 className="text-lg font-semibold mb-4">Preview</h2>
             <div
-              className="prose max-w-none h-[calc(100vh-300px)] overflow-auto"
-              dangerouslySetInnerHTML={{ __html: marked(markdown) }}
-            />
+              className="prose max-w-none h-[calc(100vh-300px)] overflow-auto" />
+              {/* // dangerouslySetInnerHTML={{ __html: marked(markdown) }} */}
+              
+            
           </div>
         </div>
       </div>
