@@ -14,6 +14,7 @@ exports.createPost = async (req, res) => {
     const newPost = new Post({
       title,
       content,
+      user: req.user._id,
     });
 
     const savedPost = await newPost.save();
