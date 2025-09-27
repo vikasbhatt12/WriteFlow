@@ -1,30 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { getAllPosts, deletePost } from "../api";
+import { getMyPosts, deletePost } from '../api';
 import toast from 'react-hot-toast';
+import AuthContext from '../context/AuthContext';
+
 
 const BlogFeed = () => {
   const [posts, setPosts] = useState([]);
+  const { userInfo } = useContext(AuthContext); 
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const savedPosts = await getAllPosts();
-        setPosts(savedPosts);
-      } catch (err) {
-        console.error("Failed to fetch posts");
-      }
-    };
-
-    fetchPosts();
-  }, []);
+   useEffect(() => {
+    
+    if (userInfo) {
+      const fetchPosts = async () => {
+        try {
+          const savedPosts = await getMyPosts(); 
+          setPosts(savedPosts);
+        } catch (error) {
+          console.error("Failed to fetch posts");
+          toast.error('Could not fetch your posts.');
+        }
+      };
+      fetchPosts();
+    }
+  }, [userInfo]); 
 
    const handleDelete = async (id) => {
-    // Ask for confirmation before deleting
+   
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
         await deletePost(id);
-        // Remove the deleted post from the state to update the UI
+        
         setPosts(posts.filter(post => post._id !== id));
         toast.success('Post deleted successfully!');
       } catch (error) {
@@ -39,6 +45,18 @@ const BlogFeed = () => {
       ? `${firstFewLines.substring(0, 150)}...`
       : firstFewLines;
   };
+
+   if (!userInfo) {
+    return (
+      <div className="text-center py-20">
+        <h1 className="text-2xl font-bold mb-4">Please log in to see your blogs.</h1>
+        <Link to="/login" className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          Login
+        </Link>
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">

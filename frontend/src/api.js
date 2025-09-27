@@ -52,3 +52,8 @@ export const deletePost = async (id) => {
   const response = await axios.delete(`${API_BASE_URL}/posts/${id}`, getConfig());
   return response.data;
 };
+
+export const getMyPosts = async () => {
+  const response = await axios.get(`${API_BASE_URL}/posts/my-posts`, getConfig());
+  return response.data;
+};

@@ -93,3 +93,14 @@ exports.deletePost = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+exports.getMyPosts = async (req, res) => {
+  try {
+    
+    const posts = await Post.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error('--- ERROR GETTING MY POSTS ---', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};

@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
 // import { marked } from 'marked';
 import { getPostById } from '../api'; 
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
+
+   // 1. Define custom components with Tailwind classes to add spacing
+  const components = {
+    h2: ({node, ...props}) => <h2 className="mb-4" {...props} />,
+    h3: ({node, ...props}) => <h3 className="mb-4" {...props} />,
+    p: ({node, ...props}) => <p className="mb-4" {...props} />,
+    pre: ({node, ...props}) => <pre className="mb-4" {...props} />,
+    ul: ({node, ...props}) => <ul className="mb-4" {...props} />,
+  };
 
     useEffect(() => {
     const fetchPost = async () => {
@@ -45,7 +55,11 @@ const BlogPost = () => {
             Published on {new Date(post.createdAt).toLocaleDateString()}
           </p>
           {/* <div dangerouslySetInnerHTML={{ __html: marked(post.content) }} /> */}
-          <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+          <ReactMarkdown 
+              rehypePlugins={[rehypeHighlight]}
+              remarkPlugins={[remarkGfm]}
+              components={components} 
+          >
             {post.content}
           </ReactMarkdown>
         </article>

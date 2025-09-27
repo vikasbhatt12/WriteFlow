@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
 // import { marked } from 'marked';
 import toast from 'react-hot-toast';
 import { getPostById, updatePost } from '../api';
@@ -12,6 +13,15 @@ const EditPost = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
+
+  // 1. Define custom components with Tailwind classes to add spacing
+  const components = {
+    h2: ({node, ...props}) => <h2 className="mb-4" {...props} />,
+    h3: ({node, ...props}) => <h3 className="mb-4" {...props} />,
+    p: ({node, ...props}) => <p className="mb-4" {...props} />,
+    pre: ({node, ...props}) => <pre className="mb-4" {...props} />,
+    ul: ({node, ...props}) => <ul className="mb-4" {...props} />,
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -74,11 +84,16 @@ const EditPost = () => {
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h2 className="text-lg font-semibold mb-4">Preview</h2>
             <div
-              className="prose max-w-none h-[calc(100vh-350px)] overflow-auto"/>
+              className="prose max-w-none h-[calc(100vh-350px)] overflow-auto">
             {/* //   dangerouslySetInnerHTML={{ __html: marked(markdown) }} */}
-            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                {markdown}
+              <ReactMarkdown 
+                  rehypePlugins={[rehypeHighlight]}
+                  remarkPlugins={[remarkGfm]}
+                  components={components}
+                >
+                  {markdown}
               </ReactMarkdown>
+            </div>
             
           </div>
         </div>
