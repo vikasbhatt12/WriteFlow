@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Editor from './pages/Editor';
+import EditPost from './pages/EditPost'; 
 import BlogFeed from './pages/BlogFeed';
 import BlogPost from './pages/BlogPost';
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/editor" element={<Editor />} />
+          <Route path="/edit/:id" element={<EditPost />}/>
           <Route path="/my-blogs" element={<BlogFeed />} />
           <Route path="/post/:id" element={<BlogPost />} />
         </Routes>

@@ -1,42 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { marked } from 'marked';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom'; 
+import { createPost } from '../api'; 
 
 const Editor = () => {
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
-  const [lastSaved, setLastSaved] = useState(null);
+  const navigate = useNavigate();
 
-  // Auto-save feature
-  useEffect(() => {
-    const autoSaveTimer = setTimeout(() => {
-      if (markdown || title) {
-        handleSave();
-      }
-    }, 30000); // Auto-save every 30 seconds
 
-    return () => clearTimeout(autoSaveTimer);
-  }, [markdown, title]);
-
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() || !markdown.trim()) {
       toast.error('Please add both title and content');
       return;
     }
 
-    const post = {
-      id: Date.now(),
-      title,
-      content: markdown,
-      createdAt: new Date().toISOString(),
-    };
-
-    // Get existing posts or initialize empty array
-    const existingPosts = JSON.parse(localStorage.getItem('blog-posts') || '[]');
-    localStorage.setItem('blog-posts', JSON.stringify([...existingPosts, post]));
-    
-    setLastSaved(new Date());
-    toast.success('Post saved successfully!');
+    try {
+      const newPost = { title, content: markdown };
+      await createPost(newPost); 
+      
+      toast.success('Post saved successfully!');
+      navigate('/my-blogs'); 
+    } catch (error) {
+      toast.error('Failed to save the post.');
+    }
   };
 
   const handleCopyMarkdown = () => {
@@ -83,11 +71,6 @@ const Editor = () => {
               onChange={(e) => setMarkdown(e.target.value)}
               placeholder="Write your blog post in Markdown..."
             />
-            {lastSaved && (
-              <p className="text-sm text-gray-500 mt-2">
-                Last saved: {new Date(lastSaved).toLocaleString()}
-              </p>
-            )}
           </div>
 
           {/* Preview Pane */}

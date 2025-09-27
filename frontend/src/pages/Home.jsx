@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center px-4">
-      <h1 className="text-5xl font-extrabold text-gray-800 mb-4">Welcome to MarkItDown</h1>
+      <h1 className="text-5xl font-extrabold text-gray-800 mb-4">Welcome to WriteFlow</h1>
       <p className="text-lg text-gray-600 mb-8 max-w-2xl">
         A modern, responsive, and intuitive Markdown-based blog where your ideas take center stage. 
         Create, edit, and share your thoughts with a seamless writing experience.

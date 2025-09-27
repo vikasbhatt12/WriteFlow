@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { marked } from 'marked';
+import { getPostById } from '../api'; 
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
-  useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem('blog-posts') || '[]');
-    const currentPost = savedPosts.find(p => p.id.toString() === id);
-    setPost(currentPost);
+    useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const currentPost = await getPostById(id);
+        setPost(currentPost);
+      } catch (error) {
+        console.error("Failed to fetch post", error);
+        setPost(null); // Ensure post is null if fetch fails
+      }
+    };
+    
+    fetchPost();
   }, [id]);
 
   if (!post) {
