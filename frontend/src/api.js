@@ -1,59 +1,54 @@
-
+// client/src/api.js
 import axios from 'axios';
 
 
-const API_URL = 'http://localhost:5001/api/posts';
+const API_BASE_URL = 'http://localhost:5001/api';
 
+
+const getConfig = () => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  
+  const token = userInfo ? userInfo.token : null;
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
+
+export const register = async (userData) => {
+  const response = await axios.post(`${API_BASE_URL}/users/register`, userData);
+  return response.data;
+};
+
+export const login = async (userData) => {
+  const response = await axios.post(`${API_BASE_URL}/users/login`, userData);
+  return response.data;
+};
 
 export const getAllPosts = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching all posts:', error);
-    throw error;
-  }
+  const response = await axios.get(`${API_BASE_URL}/posts`);
+  return response.data;
 };
-
 
 export const getPostById = async (id) => {
-  try {
-    const response = await axios.get(`${API_URL}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching post with id ${id}:`, error);
-    throw error;
-  }
+  const response = await axios.get(`${API_BASE_URL}/posts/${id}`);
+  return response.data;
 };
 
-
 export const createPost = async (postData) => {
-  try {
-    const response = await axios.post(API_URL, postData);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating post:', error);
-    throw error;
-  }
+  const response = await axios.post(`${API_BASE_URL}/posts`, postData, getConfig());
+  return response.data;
 };
 
 export const updatePost = async (id, postData) => {
-  try {
-    const response = await axios.put(`${API_URL}/${id}`, postData);
-    return response.data;
-  } catch (error) {
-    console.error(`Error updating post with id ${id}:`, error);
-    throw error;
-  }
+  const response = await axios.put(`${API_BASE_URL}/posts/${id}`, postData, getConfig());
+  return response.data;
 };
 
-
 export const deletePost = async (id) => {
-  try {
-    const response = await axios.delete(`${API_URL}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error deleting post with id ${id}:`, error);
-    throw error;
-  }
+  const response = await axios.delete(`${API_BASE_URL}/posts/${id}`, getConfig());
+  return response.data;
 };
