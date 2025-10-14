@@ -13,7 +13,14 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 
-app.use(cors()); 
+const corsOptions = {
+  
+  origin: 'https://write-flow-tawny.vercel.app', 
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
+
 app.use(express.json()); 
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
