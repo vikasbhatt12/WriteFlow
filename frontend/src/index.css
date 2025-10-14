@@ -1,2 +1,7 @@
+/* For syntax highlighting in code blocks */
 @import 'highlight.js/styles/github.css';
-@import "tailwindcss";
+
+/* The standard Tailwind CSS v3 directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
