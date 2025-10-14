@@ -3,14 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-// import { marked } from 'marked';
 import { getPostById } from '../api'; 
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
-   // 1. Define custom components with Tailwind classes to add spacing
   const components = {
     h2: ({node, ...props}) => <h2 className="mb-4" {...props} />,
     h3: ({node, ...props}) => <h3 className="mb-4" {...props} />,
@@ -19,25 +17,23 @@ const BlogPost = () => {
     ul: ({node, ...props}) => <ul className="mb-4" {...props} />,
   };
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchPost = async () => {
       try {
         const currentPost = await getPostById(id);
         setPost(currentPost);
       } catch (error) {
-        console.error("Failed to fetch post", error);
-        setPost(null); // Ensure post is null if fetch fails
+        setPost(null);
       }
     };
-    
     fetchPost();
   }, [id]);
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold">Post not found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Post not found</h2>
           <Link to="/my-blogs" className="text-blue-500 mt-4 inline-block">Back to My Blogs</Link>
         </div>
       </div>
@@ -45,20 +41,17 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12">
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <article className="prose lg:prose-xl max-w-none">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            {post.title}
-          </h1>
-          <p className="text-base text-gray-500">
+        <article className="prose lg:prose-xl max-w-none dark:prose-invert">
+          <h1>{post.title}</h1>
+          <p className="text-base text-gray-500 dark:text-gray-400">
             Published on {new Date(post.createdAt).toLocaleDateString()}
           </p>
-          {/* <div dangerouslySetInnerHTML={{ __html: marked(post.content) }} /> */}
           <ReactMarkdown 
-              rehypePlugins={[rehypeHighlight]}
-              remarkPlugins={[remarkGfm]}
-              components={components} 
+            rehypePlugins={[rehypeHighlight]}
+            remarkPlugins={[remarkGfm]}
+            components={components} 
           >
             {post.content}
           </ReactMarkdown>

@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-// import { marked } from 'marked';
 import toast from 'react-hot-toast';
 import { getPostById, updatePost } from '../api';
 
@@ -14,7 +12,6 @@ const EditPost = () => {
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
 
-  // 1. Define custom components with Tailwind classes to add spacing
   const components = {
     h2: ({node, ...props}) => <h2 className="mb-4" {...props} />,
     h3: ({node, ...props}) => <h3 className="mb-4" {...props} />,
@@ -52,21 +49,23 @@ const EditPost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold mb-4">Edit Post</h1>
-        <input
-          type="text"
-          placeholder="Enter post title..."
-          className="w-full px-4 py-2 text-xl font-bold border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">Edit Post</h1>
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Enter post title..."
+            className="w-full px-4 py-2 text-xl font-bold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 dark:border-gray-600"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Editor Pane */}
-          <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Editor</h2>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Editor</h2>
               <button
                 onClick={handleUpdate}
                 className="px-4 py-2 text-sm bg-green-500 text-white hover:bg-green-600 rounded-md"
@@ -75,26 +74,23 @@ const EditPost = () => {
               </button>
             </div>
             <textarea
-              className="w-full h-[calc(100vh-350px)] p-4 border rounded-md"
+              className="w-full h-[calc(100vh-350px)] p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 dark:border-gray-600"
               value={markdown}
               onChange={(e) => setMarkdown(e.target.value)}
             />
           </div>
-          {/* Preview Pane */}
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <h2 className="text-lg font-semibold mb-4">Preview</h2>
-            <div
-              className="prose max-w-none h-[calc(100vh-350px)] overflow-auto">
-            {/* //   dangerouslySetInnerHTML={{ __html: marked(markdown) }} */}
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Preview</h2>
+            <div className="prose max-w-none h-[calc(100vh-350px)] overflow-auto dark:prose-invert">
               <ReactMarkdown 
-                  rehypePlugins={[rehypeHighlight]}
-                  remarkPlugins={[remarkGfm]}
-                  components={components}
-                >
-                  {markdown}
+                rehypePlugins={[rehypeHighlight]}
+                remarkPlugins={[remarkGfm]}
+                components={components}
+              >
+                {markdown}
               </ReactMarkdown>
             </div>
-            
           </div>
         </div>
       </div>

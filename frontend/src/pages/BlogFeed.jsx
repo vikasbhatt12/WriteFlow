@@ -4,33 +4,29 @@ import { getMyPosts, deletePost } from '../api';
 import toast from 'react-hot-toast';
 import AuthContext from '../context/AuthContext';
 
-
 const BlogFeed = () => {
   const [posts, setPosts] = useState([]);
-  const { userInfo } = useContext(AuthContext); 
+  const { userInfo } = useContext(AuthContext);
 
-   useEffect(() => {
-    
+  useEffect(() => {
     if (userInfo) {
       const fetchPosts = async () => {
         try {
-          const savedPosts = await getMyPosts(); 
+          const savedPosts = await getMyPosts();
           setPosts(savedPosts);
         } catch (error) {
-          console.error("Failed to fetch posts");
+          console.error("Failed to fetch posts", error);
           toast.error('Could not fetch your posts.');
         }
       };
       fetchPosts();
     }
-  }, [userInfo]); 
+  }, [userInfo]);
 
-   const handleDelete = async (id) => {
-   
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
         await deletePost(id);
-        
         setPosts(posts.filter(post => post._id !== id));
         toast.success('Post deleted successfully!');
       } catch (error) {
@@ -40,16 +36,17 @@ const BlogFeed = () => {
   };
 
   const getPostPreview = (content) => {
-    const firstFewLines = content.split("\n").slice(0, 4).join(" ");
+    const plainText = content.replace(/(\*|_|#|`|~|>)/g, '');
+    const firstFewLines = plainText.split("\n").slice(0, 4).join(" ");
     return firstFewLines.length > 150
       ? `${firstFewLines.substring(0, 150)}...`
       : firstFewLines;
   };
 
-   if (!userInfo) {
+  if (!userInfo) {
     return (
-      <div className="text-center py-20">
-        <h1 className="text-2xl font-bold mb-4">Please log in to see your blogs.</h1>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-center py-20">
+        <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Please log in to see your blogs.</h1>
         <Link to="/login" className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
           Login
         </Link>
@@ -57,60 +54,48 @@ const BlogFeed = () => {
     );
   }
 
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-center mb-10">My Blogs</h1>
-
+        <h1 className="text-4xl font-bold text-center mb-10 text-gray-800 dark:text-gray-100">My Blogs</h1>
         {posts.length > 0 ? (
           <div className="space-y-8">
             {posts.map((post) => (
               <div
                 key={post._id}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
               >
-                <h2 className="text-2xl font-bold mb-2">
-                  <Link
-                    to={`/post/${post._id}`}
-                    className="text-gray-800 hover:text-blue-600"
-                  >
+                <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-100">
+                  <Link to={`/post/${post._id}`} className="hover:text-blue-600 dark:hover:text-blue-400">
                     {post.title}
                   </Link>
                 </h2>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                   {new Date(post.createdAt).toLocaleDateString()}
                 </p>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
                   {getPostPreview(post.content)}
                 </p>
-                <Link
-                  to={`/post/${post._id}`}
-                  className="text-blue-500 hover:text-blue-700 font-semibold"
-                >
-                  Read More &rarr;
-                </Link>
-                <div className="space-x-2">
+                <div className="flex justify-between items-center mt-4">
+                   <Link to={`/post/${post._id}`} className="text-blue-500 hover:text-blue-700 font-semibold">
+                     Read More &rarr;
+                   </Link>
+                  <div className="space-x-2">
                     <Link to={`/edit/${post._id}`} className="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500">
                       Edit
                     </Link>
-                    <button 
-                      onClick={() => handleDelete(post._id)}
-                      className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
-                    >
+                    <button onClick={() => handleDelete(post._id)} className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600">
                       Delete
                     </button>
                   </div>
+                </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500">
+          <div className="text-center text-gray-500 dark:text-gray-400">
             <p>No blog posts yet. Start writing one!</p>
-            <Link
-              to="/editor"
-              className="mt-4 inline-block px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
+            <Link to="/editor" className="mt-4 inline-block px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
               Write a Post
             </Link>
           </div>
