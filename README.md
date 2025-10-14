@@ -5,8 +5,12 @@ A feature-rich, full-stack web application built with the MERN stack, inspired b
 
 [**Live Demo**](your-live-demo-link-here.com)
 
-![App Screenshot](./link-to-your-screenshot.png)
-*(A screenshot of the app's editor in dark mode would be perfect here!)*
+**App Screenshot**
+
+![Home](./frontend/Output%20Screenshots/home.png)
+![Editor](./frontend/Output%20Screenshots/editor.png)
+![Myblogs](./frontend/Output%20Screenshots/myblog.png)
+
 
 ---
 
