@@ -9,7 +9,7 @@ A feature-rich, full-stack web application built with the MERN stack, inspired b
 
 ![Home](./frontend/Output%20Screenshots/home.png)
 ![Editor](./frontend/Output%20Screenshots/editor.png)
-![Myblogs](./frontend/Output%20Screenshots/myblogs.png)
+![Myblogs](./frontend/Output%20Screenshots/Myblogs.png)
 
 
 ---
